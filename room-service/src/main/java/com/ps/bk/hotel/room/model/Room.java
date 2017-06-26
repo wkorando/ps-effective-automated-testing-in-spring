@@ -6,6 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Java class representation of a record in the Rooms table. 
+ * @author williamkorando
+ *
+ */
 @Entity
 @Table(name="rooms")
 public class Room {
