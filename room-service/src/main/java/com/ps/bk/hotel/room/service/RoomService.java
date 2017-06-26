@@ -7,4 +7,5 @@ public interface RoomService {
 	Room findRoom(long roomId);
 	void updateRoom(Room room);
 	void addRoom(Room room);
+	Room findByRoomNumber(String string);
 }
