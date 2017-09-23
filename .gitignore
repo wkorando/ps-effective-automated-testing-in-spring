@@ -6,3 +6,15 @@
 /room-service/.springBeans
 /room-service/.classpath
 /room-service/target
+/booking-service/.settings/
+/booking-service/.mvn/
+/booking-service/.project
+/booking-service/.springBeans
+/booking-service/.classpath
+/booking-service/target
+/customer-service/.settings/
+/customer-service/.mvn/
+/customer-service/.project
+/customer-service/.springBeans
+/customer-service/.classpath
+/customer-service/target

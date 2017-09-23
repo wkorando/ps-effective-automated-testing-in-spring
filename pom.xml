@@ -10,6 +10,8 @@
 
 	<modules>
 		<module>room-service</module>
+		<module>booking-service</module>
+		<module>customer-service</module>
 	</modules>
 
 </project>
