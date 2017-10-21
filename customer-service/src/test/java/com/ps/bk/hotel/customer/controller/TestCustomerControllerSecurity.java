@@ -39,17 +39,20 @@ public class TestCustomerControllerSecurity {
 	@Test
 	public void testFindAllCustomersWithInvalidUser() throws Exception {
 		when(service.findAllCustomers()).thenReturn(Arrays.asList(new Customer(), new Customer()));
-		mockMvc.perform(get("/customers").with(user("invalidUser"))).andExpect(status().isForbidden());
+		mockMvc.perform(get("/customers").with(user("invalidUser")))
+			.andExpect(status().isForbidden());
 	}
 	
 	@Test
 	public void testFindAllCustomersWithUserWhoDoesntHaveRightRole() throws Exception {
 		when(service.findAllCustomers()).thenReturn(Arrays.asList(new Customer(), new Customer()));
-		mockMvc.perform(get("/customers").with(user("todd").password("abc123").roles("USER"))).andExpect(status().isForbidden());
+		mockMvc.perform(get("/customers").with(user("todd")
+				.password("abc123").roles("USER"))).andExpect(status().isForbidden());
 	}
 	
 	@Test
 	public void testFindAllCustomersWithValidUser() throws Exception {
-		mockMvc.perform(get("/customers").with(user("bojack").password("abc123").roles("ADMIN"))).andExpect(status().isOk());
+		mockMvc.perform(get("/customers").with(user("bojack")
+				.password("abc123").roles("ADMIN"))).andExpect(status().isOk());
 	}
 }

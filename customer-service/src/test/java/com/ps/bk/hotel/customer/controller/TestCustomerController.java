@@ -39,14 +39,18 @@ public class TestCustomerController {
 	public void testSuccessfulFindAllCustomers() throws Exception {
 		when(service.findAllCustomers()).thenReturn(Arrays.asList(new Customer(), new Customer()));
 		mockMvc.perform(get("/customers")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(2)));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(2)));
 	}
 
 	@Test
 	public void testSuccessSearchCustomersByFNameLName() throws Exception {
-		when(service.findCustomersByFNameLName("test", "test")).thenReturn(Arrays.asList(new Customer()));
-		mockMvc.perform(get("/customers/search/byFNameLName?fName=test&lName=test")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(1)));
+		when(service.findCustomersByFNameLName("test", "test"))
+		.thenReturn(Arrays.asList(new Customer()));
+		mockMvc.perform(get("/customers/search/byFNameLName?fName=test&lName=test"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)));
 	}
 
 	@Test

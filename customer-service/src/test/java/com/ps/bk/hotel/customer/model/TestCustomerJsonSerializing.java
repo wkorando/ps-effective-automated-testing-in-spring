@@ -15,14 +15,14 @@ import org.springframework.boot.test.json.JacksonTester;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class TestCustomerJsonMarshalling {
+public class TestCustomerJsonSerializing {
 
 	private JacksonTester<Customer> json;
 	OffsetDateTime dateTime;
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-	private String jsonValidFullCustomer = "{\"firstName\" : \"John\",\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12\"}";
-	private String jsonMissingFirstNameCustomer = "{\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12\"}";
-	private String jsonCustomerExtraFields = "{\"firstName\" : \"John\",\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12\", \"ExtraField\" : \"extraValue\"}";
+	private String jsonValidFullCustomer = "{\"firstName\" : \"John\",\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12T00:00:00.000Z\"}";
+	private String jsonMissingFirstNameCustomer = "{\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12T00:00:00.000Z\"}";
+	private String jsonCustomerExtraFields = "{\"firstName\" : \"John\",\"lastName\" : \"Doe\",\"middleName\" : \"Middle\",\"suffix\" : \"Jr.\",\"lastStayDate\" : \"2017-09-12T00:00:00.000Z\", \"ExtraField\" : \"extraValue\"}";
 
 	@Before
 	public void setup() {
@@ -31,11 +31,19 @@ public class TestCustomerJsonMarshalling {
 	}
 
 	@Test
-	public void testValidFullCustomer() throws IOException, ParseException {
+	public void testValidFullCustomerParseJson() throws IOException, ParseException {
 		Customer customer = new Customer.CustomerBuilder().firstName("John").lastName("Doe").middleName("Middle")
-				.suffix("Jr.").id(0L).dateOfLastStay(df.parse("2017-09-12T00:00:00.000-00:00")).build();
+				.suffix("Jr.").id(0L).dateOfLastStay(df.parse("2017-09-12T00:00:00.000Z")).build();
 
 		this.json.parse(jsonValidFullCustomer).assertThat().isEqualTo(customer);
+	}
+	
+	@Test
+	public void testValidFullCustomerMarshallObjectToJson() throws IOException, ParseException {
+		Customer customer = new Customer.CustomerBuilder().firstName("John").lastName("Doe").middleName("Middle")
+				.suffix("Jr.").id(0L).dateOfLastStay(df.parse("2017-09-12T00:00:00.000Z")).build();
+
+		this.json.write(customer).assertThat().isEqualTo(jsonValidFullCustomer);
 	}
 
 	@Test

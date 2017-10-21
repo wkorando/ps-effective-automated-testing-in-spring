@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,6 +30,7 @@ public class Customer {
 	@Column(name = "suffix")
 	private String suffix;
 	@Column(name = "date_of_last_stay")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 	private Date dateOfLastStay;
 
 	public Customer() {
@@ -88,6 +90,7 @@ public class Customer {
 		this.suffix = suffix;
 	}
 
+	@JsonProperty("lastStayDate")
 	public Date getDateOfLastStay() {
 		return dateOfLastStay;
 	}
@@ -189,6 +192,12 @@ public class Customer {
 		public Customer build() {
 			return new Customer(id, firstName, lastName, middleName, suffix, dateOfLastStay);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", middleName="
+				+ middleName + ", suffix=" + suffix + ", dateOfLastStay=" + dateOfLastStay + "]";
 	}
 
 }
