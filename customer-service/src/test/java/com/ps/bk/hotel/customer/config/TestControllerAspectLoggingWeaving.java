@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,6 +23,8 @@ import com.ps.bk.hotel.customer.service.CustomerService;
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = CustomerController.class, secure = false)
 @Import(ControllerLoggingAspect.class)
+@TestPropertySource(properties="logging.config=classpath:logback-static-appender.xml")
+@DirtiesContext(classMode=ClassMode.BEFORE_CLASS)
 public class TestControllerAspectLoggingWeaving {
 
 	@MockBean

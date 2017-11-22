@@ -15,13 +15,13 @@ public class Booking {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(name = "room_number")
+	@Column(name = "customer_id")
 	private Long customerId;
 	@Column(name = "room_number")
-	private Long roomId;
-	@Column(name = "room_number")
+	private String roomNumber;
+	@Column(name = "start_date")
 	private Date startDate;
-	@Column(name = "room_number")
+	@Column(name = "end_date")
 	private Date endDate;
 
 	public Long getId() {
@@ -40,12 +40,12 @@ public class Booking {
 		this.customerId = customerId;
 	}
 
-	public Long getRoomId() {
-		return roomId;
+	public String getRoomNumber() {
+		return roomNumber;
 	}
 
-	public void setRoomId(Long roomId) {
-		this.roomId = roomId;
+	public void setRoomNumber(String roomNumber) {
+		this.roomNumber = roomNumber;
 	}
 
 	public Date getStartDate() {

@@ -1,5 +1,6 @@
 package com.ps.bk.hotel.room.service;
 
+import com.ps.bk.hotel.room.model.Booking;
 import com.ps.bk.hotel.room.model.Room;
 
 public interface RoomService {
@@ -8,4 +9,5 @@ public interface RoomService {
 	void updateRoom(Room room);
 	void addRoom(Room room);
 	Room findByRoomNumber(String string);
+	String bookRoom(Booking booking);
 }

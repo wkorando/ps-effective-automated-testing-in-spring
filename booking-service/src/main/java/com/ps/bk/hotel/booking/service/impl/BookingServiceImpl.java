@@ -1,9 +1,12 @@
 package com.ps.bk.hotel.booking.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.ps.bk.hotel.booking.model.Booking;
 import com.ps.bk.hotel.booking.repo.BookingRepo;
 import com.ps.bk.hotel.booking.service.BookingService;
 
+@Service
 public class BookingServiceImpl implements BookingService {
 	private BookingRepo repo;
 	
@@ -22,8 +25,8 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public void addBooking(Booking booking) {
-		repo.save(booking);
+	public Long addBooking(Booking booking) {
+		return repo.save(booking).getId();
 	}
 
 	@Override
