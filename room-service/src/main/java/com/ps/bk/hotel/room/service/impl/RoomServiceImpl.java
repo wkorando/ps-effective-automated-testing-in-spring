@@ -1,5 +1,7 @@
 package com.ps.bk.hotel.room.service.impl;
 
+import java.util.List;
+
 import org.h2.util.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -59,6 +61,11 @@ public class RoomServiceImpl implements RoomService {
 	public String bookRoom(Booking booking) {
 		ResponseEntity<?> entity = restTemplate.postForEntity("http://localhost:8081/bookings/", booking, null);
 		return entity.getHeaders().getLocation().toString();
+	}
+
+	@Override
+	public List<Room> findRoomsByFloor(String floorNumber) {
+		return repo.findRoomsByFloor(floorNumber);
 	}
 
 }

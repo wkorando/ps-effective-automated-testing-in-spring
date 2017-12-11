@@ -1,3 +1,11 @@
+CREATE TABLE rooms (
+id SERIAL, 
+room_number varchar(20),
+weekday_price DECIMAL(20, 2),
+weekend_price DECIMAL(20, 2),
+roomType varchar(20),
+floor varchar(20));
+
 INSERT INTO rooms values (100, 55.00, 75.00, 'Single',  1);
 INSERT INTO rooms values (101, 55.00, 75.00, 'Single',  1);
 INSERT INTO rooms values (102, 85.00, 105.00, 'Double', 1);
@@ -6,6 +14,7 @@ INSERT INTO rooms values (104, 150.00, 175.00, 'Suite', 1);
 INSERT INTO rooms values (105, 85.00, 105.00, 'Double', 1);
 INSERT INTO rooms values (106, 55.00, 75.00, 'Single',  1);
 INSERT INTO rooms values (107, 85.00, 105.00, 'Double', 1);
+INSERT INTO rooms values (123, 85.00, 105.00, 'Double', 1);
 
 INSERT INTO rooms values (200, 55.00, 75.00, 'Single',  2);
 INSERT INTO rooms values (201, 55.00, 75.00, 'Single',  2);

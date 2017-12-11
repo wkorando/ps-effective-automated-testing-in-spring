@@ -26,6 +26,7 @@ public class CustomerController {
 		return ResponseEntity.ok(service.findAllCustomers());
 	}
 	
+	
 	@GetMapping("/search/byFNameLName")
 	public ResponseEntity<?> findCustomersByFNameLName(@RequestParam("fName") String fName,@RequestParam("lName") String lName){
 		ResponseEntity<?> response; 

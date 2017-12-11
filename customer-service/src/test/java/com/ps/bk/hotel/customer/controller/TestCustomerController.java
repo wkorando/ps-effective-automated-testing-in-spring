@@ -5,16 +5,23 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -27,7 +34,8 @@ import com.ps.bk.hotel.customer.model.Customer;
 import com.ps.bk.hotel.customer.service.CustomerService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = CustomerController.class, secure=false)
+@WebMvcTest(controllers = CustomerController.class, secure = false)
+@AutoConfigureRestDocs(outputDir = "target/generated-docs")
 @DirtiesContext
 public class TestCustomerController {
 
@@ -37,28 +45,48 @@ public class TestCustomerController {
 	@Autowired
 	private MockMvc mockMvc;
 
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
 	@Test
 	public void testSuccessfulFindAllCustomers() throws Exception {
-		when(service.findAllCustomers()).thenReturn(Arrays.asList(new Customer(), new Customer()));
+		Customer customer = new Customer(1L, "John", "Doe", "Middle", "Jr", dateFormat.parse("11/15/2017"));
+		Customer customer2 = new Customer(1L, "Jane", "Doe", "Middle", "", dateFormat.parse("10/11/2017"));
+		when(service.findAllCustomers()).thenReturn(Arrays.asList(customer, customer2));
 		mockMvc.perform(get("/customers")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$", hasSize(2)));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(2)))
+				.andDo(document("customers", responseFields(fieldWithPath("[].id").description("The customer's Id"),
+						fieldWithPath("[].firstName").description("The customer's first name"),
+						fieldWithPath("[].lastName").description("The customer's last name"),
+						fieldWithPath("[].middleName").description("The customer's middle name"),
+						fieldWithPath("[].suffix").description("The customer's suffix"),
+						fieldWithPath("[].lastStayDate").description(
+								"The date the customer last stayed at the hotel formatted as: yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))));
 	}
 
 	@Test
 	public void testSuccessSearchCustomersByFNameLName() throws Exception {
-		when(service.findCustomersByFNameLName("test", "test"))
-		.thenReturn(Arrays.asList(new Customer()));
-		mockMvc.perform(get("/customers/search/byFNameLName?fName=test&lName=test"))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$", hasSize(1)));
+		Customer customer = new Customer(1L, "John", "Doe", "Middle", "Jr", dateFormat.parse("11/15/2017"));
+		when(service.findCustomersByFNameLName("test", "test")).thenReturn(Arrays.asList(customer));
+		mockMvc.perform(get("/customers/search/byFNameLName?fName=test&lName=test")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(jsonPath("$", hasSize(1)))
+				.andDo(document("customers-search-by-fname-lname",
+						requestParameters(parameterWithName("fName").description("The customer's first name"),
+								parameterWithName("lName").description("The customer's last name")),
+						responseFields(fieldWithPath("[].id").description("The customer's Id"),
+								fieldWithPath("[].firstName").description("The customer's first name"),
+								fieldWithPath("[].lastName").description("The customer's last name"),
+								fieldWithPath("[].middleName").description("The customer's middle name"),
+								fieldWithPath("[].suffix").description("The customer's suffix"),
+								fieldWithPath("[].lastStayDate").description(
+										"The date the customer last stayed at the hotel formatted as: yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))));
+
 	}
 
 	@Test
 	public void testMissingParamSearchCustomersByFNameLName() throws Exception {
 		mockMvc.perform(get("/customers/search/byFNameLName?fName=test")).andExpect(status().isBadRequest())
-				.andExpect(content().string(""));
+				.andExpect(content().string("")).andDo(document("customers",
+						requestParameters(parameterWithName("fName").description("The customer's first name"))));
 		verify(service, times(0)).findCustomersByFNameLName(any(), any());
 	}
 

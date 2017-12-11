@@ -1,6 +1,6 @@
 package com.ps.test.room.room.service;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,9 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.ps.bk.hotel.room.RoomServiceApplication;
 import com.ps.bk.hotel.room.model.Booking;
 import com.ps.bk.hotel.room.service.RoomService;
-import com.ps.bk.hotel.room.RoomServiceApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes= RoomServiceApplication.class)
@@ -34,8 +34,7 @@ public class ContractValidatorRoomService {
 		booking.setCheckIn(dateFormat.parse("10-31-2017"));
 		booking.setCheckOut(dateFormat.parse("11-05-2017"));
 		String url = roomService.bookRoom(booking);
-		
-		assertEquals("bookings/1", url);
+		assertThat(url).isEqualTo("bookings/2").withFailMessage("DIDN'T MATCH!");
 	}
-
+	
 }
